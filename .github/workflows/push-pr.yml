@@ -1,0 +1,38 @@
+name: Push PR
+
+on:
+    push:
+        branches:
+            - main
+            - "release/**"
+            - "hotfix/**"
+            - "feature/**"
+        
+        paths:
+            - '**.md'
+            - '.github/workflows/push-pr.yml'
+            - 'src/**'
+            - 'tests/**'
+    
+    pull_request:
+        branches:
+            - main
+            - "release/**"
+            - "hotfix/**"
+            - "feature/**"
+
+jobs:
+    test-job:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v6.0.2
+
+            - name: Print Changed Files
+              run: |
+                  echo "Changed files in this PR or Push:"
+                  git diff --name-only ${{ github.event.before }} ${{ github.event.after }}
+
+            - name: List Repository Files
+              run: ls -la
